@@ -1,107 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Character Emoji Quiz</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #495057;
             text-align: center;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            flex-direction: column;
         }
 
-        header {
-            background-color: #556B2F;
-            padding: 15px;
-            text-align: center;
+        #header {
+            margin-bottom: 20px;
         }
 
-        header img {
-            margin-left: 20px;
-            max-width: 100px;
-            max-height: 50px;
+        #logo {
+            max-width: 100%;
+            height: auto;
+            border-radius: 50%; /* Optional: Make the logo circular */
         }
 
-        .game-container {
-            margin: 20px;
-            padding: 20px;
+        #quiz-container {
+            max-width: 400px;
+            width: 100%;
             background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
-        .character, .emoji {
-            display: inline-block;
-            font-size: 24px;
-            margin: 10px;
-            padding: 10px;
-            background-color: #556B2F;
+        #question-container {
+            padding: 20px;
+            background-color: #8fbc8f; /* Darker greenish-yellow header */
             color: #fff;
-            border-radius: 5px;
+            border-bottom: 1px solid #556b2f; /* Darker olive border */
+        }
+
+        #options-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        button {
+            padding: 15px;
+            margin: 10px;
+            font-size: 16px;
             cursor: pointer;
-            user-select: none;
-            transition: background-color 0.3s;
+            background-color: #8fbc8f; /* Darker greenish-yellow button */
+            border: none;
+            border-radius: 20px;
+            color: #fff;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
-        .character:hover, .emoji:hover {
-            background-color: #8FBC8F;
+        button:hover {
+            background-color: #556b2f; /* Darker olive on hover */
+            transform: scale(1.05);
         }
 
-        #result-message {
-            margin-top: 20px;
-            color: green;
+        #streak {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #8fbc8f; /* Darker greenish-yellow text color */
+        }
+
+        #emoji {
+            font-size: 24px; /* Adjust the font size for the emoji */
         }
     </style>
-    <title>Bible Characters Emoji Game</title>
 </head>
 <body>
 
-<header>
-    <img src="logo_yellow.png" alt="Your Logo" onclick="window.location.href='index.html';">
-</header>
+<div id="header">
+    <a href="../../games.html" target="_blank">
+        <img id="logo" src="your-logo.png" alt="Logo">
+    </a>
+    <h1>Bible Character Emoji Quiz</h1>
+</div>
 
-<div class="game-container">
-    <h2>Match the Character with the Emoji</h2>
+<div id="quiz-container">
+    <div id="question-container">
+        <p id="question"></p>
+        <p id="emoji"></p>
+    </div>
 
-    <div class="character" onclick="checkMatch('Moses')">Moses</div>
-    <div class="emoji" onclick="checkMatch('👴')">👴</div>
+    <div id="options-container">
+        <button onclick="checkAnswer(this)"></button>
+        <button onclick="checkAnswer(this)"></button>
+        <button onclick="checkAnswer(this)"></button>
+        <button onclick="checkAnswer(this)"></button>
+    </div>
 
-    <div class="character" onclick="checkMatch('Jesus')">Jesus</div>
-    <div class="emoji" onclick="checkMatch('👼')">👼</div>
-
-    <!-- Add more character-emoji pairs as needed -->
-
-    <p id="result-message"></p>
+    <div id="streak">Streak: <span id="streak-counter">0</span></div>
 </div>
 
 <script>
-    let selectedCharacter = null;
+    let bibleCharacters = [
+  { name: "Adam", emojis: "🌿👫🍎🐍🌈" },
+  { name: "Eve", emojis: "🌿👫🍎🐍🌈" },
+  { name: "Noah", emojis: "⚓🚢🌧️🌈🕊️" },
+  { name: "Abraham", emojis: "🌟🏞️🚶‍♂️🐑⚔️" },
+  { name: "Sarah", emojis: "🌟👵🏻🤰👶🌈" },
+  { name: "Isaac", emojis: "👶🌈🌾⚔️🔥" },
+  { name: "Jacob", emojis: "👨‍🌾👑🐑🌟💤" },
+  { name: "Joseph", emojis: "🌈👑👕👢🏰" },
+  { name: "Moses", emojis: "🕊️🏞️🔥📜👞" },
+  { name: "Aaron", emojis: "🐍🔥📜👞👑" },
+  { name: "Miriam", emojis: "🥁🕊️👩‍🎤🌊👑" },
+  { name: "Joshua", emojis: "👞⚔️🏞️🌊📜" },
+  { name: "Deborah", emojis: "🌟👩‍⚖️🗡️🎤🌊" },
+  { name: "Gideon", emojis: "🔔🔦⚔️🌾🐏" },
+  { name: "Ruth", emojis: "🌾💔👵🏻🔑🌟" },
+  { name: "Samuel", emojis: "👦📜🔊🔦🌟" },
+  { name: "David", emojis: "🐏👦🏹👑🎶" },
+  { name: "Solomon", emojis: "👑🏰📚🤔💡" },
+  { name: "Elijah", emojis: "🔥🕊️🌧️🏞️🏴󠁧󠁢󠁷󠁬󠁳󠁿" },
+  { name: "Elisha", emojis: "🔊🕊️⚖️🌊🌾" },
+  { name: "Esther", emojis: "👸🌟🔑📜💄" },
+  { name: "Job", emojis: "🐪💼💔🤲💰" },
+  { name: "Isaiah", emojis: "🌟📜🔊🕊️🏞️" },
+  { name: "Jeremiah", emojis: "😢📜👀🏞️🔊" },
+  { name: "Ezekiel", emojis: "🔊👀📜🍞💪" },
+  { name: "Daniel", emojis: "🦁📜🔑🔊👤" },
+  { name: "Jonah", emojis: "🐋🌊🤲🏞️😢" },
+  { name: "John the Baptist", emojis: "🏞️🚿👆👕🌊" },
+  { name: "Peter", emojis: "⚓🔑🐟⛪🔥" },
+  { name: "Paul", emojis: "📜👀⚖️✋🏞️" },
+  { name: "Mary", emojis: "👩‍👧‍👦🌟🙏💔😢" },
+  { name: "Martha", emojis: "🍴🛋️💬👩‍👧‍👦🌟" },
+  { name: "Mary Magdalene", emojis: "👩‍👦‍👦🌅📜💔🕊️" },
+  { name: "Zacchaeus", emojis: "🌳👀💰🏡👆" },
+  { name: "Saul (Paul before conversion)", emojis: "📜⚔️💔😡🤲" },
+  { name: "Thomas", emojis: "❓👀⚰️👣🙏" },
+  { name: "Barnabas", emojis: "🤝📜🌅💔⚖️" },
+  { name: "Timothy", emojis: "⚖️👤👶💔📜" },
+  { name: "Phoebe", emojis: "🌊💁‍♀️📜📬🏡" },
+  { name: "Priscilla and Aquila", emojis: "🏡🔨👫📜⛪" },
+  { name: "Lydia", emojis: "🏞️💼💁‍♀️📜🌅" },
+  { name: "Silas", emojis: "🔗⛓️🔊📜🛏️" },
+  { name: "Stephen", emojis: "👦⛪📜💔⚖️" },
+  { name: "Philip", emojis: "🌊🔥📜🍞🛰️" },
+  { name: "James (son of Zebedee)", emojis: "⚓🔥⚔️💔👣" },
+  { name: "James (son of Alphaeus)", emojis: "📜🍞🍷🛏️🏡" },
+  { name: "Jude", emojis: "📜📬💔⚖️⚔️" },
+  { name: "Bartholomew", emojis: "🌍🔭💼📜📬" },
+  { name: "Matthew", emojis: "📜👀💰🍞🏞️" },
+  { name: "Simon the Zealot", emojis: "🛠️🇮🇱👊💼⚔️" },
+  { name: "Thaddeus", emojis: "📜💼💔⚖️💪" },
+  { name: "Matthias", emojis: "📜💔🏞️⚖️🤲" },
+];
 
-    function checkMatch(character) {
-        const resultMessage = document.getElementById("result-message");
-        if (!selectedCharacter) {
-            selectedCharacter = character;
-        } else {
-            if (selectedCharacter === character) {
-                resultMessage.textContent = "Correct! Well done!";
-                resultMessage.style.color = "green";
-            } else {
-                resultMessage.textContent = "Oops! Try again.";
-                resultMessage.style.color = "red";
-            }
+    let currentQuestionIndex;
+    let correctAnswerIndex; // Index of the correct answer
 
-            // Clear selection after a short delay
-            setTimeout(() => {
-                resultMessage.textContent = "";
-                selectedCharacter = null;
-            }, 1000);
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        shuffleQuestions();
+        displayQuestion();
+        updateStreak();
+    }
+
+    function shuffleQuestions() {
+        bibleCharacters = shuffleArray(bibleCharacters);
+        correctAnswerIndex = Math.floor(Math.random() * 4); // Randomly choose the index of the correct answer
+    }
+
+    function displayQuestion() {
+        const currentQuestion = bibleCharacters[currentQuestionIndex];
+        document.getElementById("question").innerHTML = `Who is represented by the emoji:`;
+        document.getElementById("emoji").innerHTML = currentQuestion.emojis;
+
+        for (let i = 0; i < 4; i++) {
+            const button = document.getElementsByTagName("button")[i];
+            const optionIndex = (i === correctAnswerIndex) ? currentQuestionIndex : getRandomOptionIndex();
+            button.innerHTML = bibleCharacters[optionIndex].name;
+            button.setAttribute("data-answer", i === correctAnswerIndex);
         }
     }
+
+    function getRandomOptionIndex() {
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * bibleCharacters.length);
+        } while (randomIndex === currentQuestionIndex); // Ensure the option is not the correct answer
+        return randomIndex;
+    }
+
+    function checkAnswer(button) {
+        const isCorrect = button.getAttribute("data-answer") === "true";
+
+        if (isCorrect) {
+            alert("Correct!");
+            // Increment the streakCounter only on correct answers
+            updateStreakCounter(1);
+        } else {
+            const correctAnswer = bibleCharacters[currentQuestionIndex].name;
+            alert(`Wrong! The correct answer is: ${correctAnswer}. Try again.`);
+            // Reset the streakCounter on wrong answers
+            updateStreakCounter(0);
+        }
+
+        currentQuestionIndex++;
+        if (currentQuestionIndex < bibleCharacters.length) {
+            displayQuestion();
+        } else {
+            alert("Congratulations! You've completed the quiz.");
+            // You can add further actions or UI changes here for completing the quiz.
+            startQuiz(); // Restart the quiz for a new session
+        }
+    }
+
+    function updateStreakCounter(increment) {
+        const streakCounter = document.getElementById("streak-counter");
+        streakCounter.textContent = parseInt(streakCounter.textContent) + increment;
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // Start the quiz when the page loads
+    window.onload = startQuiz;
 </script>
 
 </body>

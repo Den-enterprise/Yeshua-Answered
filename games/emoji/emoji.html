@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #556B2F;
+            padding: 15px;
+            text-align: center;
+        }
+
+        header img {
+            margin-left: 20px;
+            max-width: 100px;
+            max-height: 50px;
+        }
+
+        .game-container {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .character, .emoji {
+            display: inline-block;
+            font-size: 24px;
+            margin: 10px;
+            padding: 10px;
+            background-color: #556B2F;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.3s;
+        }
+
+        .character:hover, .emoji:hover {
+            background-color: #8FBC8F;
+        }
+
+        #result-message {
+            margin-top: 20px;
+            color: green;
+        }
+    </style>
+    <title>Bible Characters Emoji Game</title>
+</head>
+<body>
+
+<header>
+    <img src="logo_yellow.png" alt="Your Logo" onclick="window.location.href='index.html';">
+</header>
+
+<div class="game-container">
+    <h2>Match the Character with the Emoji</h2>
+
+    <div class="character" onclick="checkMatch('Moses')">Moses</div>
+    <div class="emoji" onclick="checkMatch('👴')">👴</div>
+
+    <div class="character" onclick="checkMatch('Jesus')">Jesus</div>
+    <div class="emoji" onclick="checkMatch('👼')">👼</div>
+
+    <!-- Add more character-emoji pairs as needed -->
+
+    <p id="result-message"></p>
+</div>
+
+<script>
+    let selectedCharacter = null;
+
+    function checkMatch(character) {
+        const resultMessage = document.getElementById("result-message");
+        if (!selectedCharacter) {
+            selectedCharacter = character;
+        } else {
+            if (selectedCharacter === character) {
+                resultMessage.textContent = "Correct! Well done!";
+                resultMessage.style.color = "green";
+            } else {
+                resultMessage.textContent = "Oops! Try again.";
+                resultMessage.style.color = "red";
+            }
+
+            // Clear selection after a short delay
+            setTimeout(() => {
+                resultMessage.textContent = "";
+                selectedCharacter = null;
+            }, 1000);
+        }
+    }
+</script>
+
+</body>
+</html>

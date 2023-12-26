@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bible Trivia</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto; /* Center horizontally */
+            /* Add more styling for your logo as needed */
+        }
+
+        .quiz-container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #333;
+        }
+
+        .question {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .option {
+            padding: 10px;
+            background-color: #8bc34a; /* Light Green */
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .option:hover {
+            background-color: #689f38; /* Darker Green */
+        }
+
+        .score {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="logo-container">
+    <!-- Wrap the logo inside an anchor tag with the desired URL -->
+    <a href="../../games.html">
+        <!-- Add your logo here or replace with an image tag -->
+        <img class="logo" src="logo yellow.png" alt="Logo" width="25%">
+    </a>
+</div>
+
+<div class="quiz-container">
+    <div class="question" id="question">Loading question...</div>
+    <div class="options" id="options"></div>
+    <div class="score" id="score">Score: 0</div>
+</div>
+
+<script>
+    // Your trivia questions and answers go here
+const questions = [
+    {
+        question: "Which biblical figure is known for his great strength and long hair?",
+        options: ["Samson", "David", "Gideon", "Solomon"],
+        correctAnswer: "Samson"
+    },
+    {
+        question: "Who was the first king anointed by the prophet Samuel?",
+        options: ["Saul", "David", "Solomon", "Jonathan"],
+        correctAnswer: "Saul"
+    },
+    {
+        question: "In the Book of Esther, what is the name of the villain who plotted against the Jews?",
+        options: ["Haman", "Mordecai", "Artaxerxes", "Xerxes"],
+        correctAnswer: "Haman"
+    },
+    {
+        question: "What is the name of the mountain where Moses received the Ten Commandments?",
+        options: ["Mount Sinai", "Mount Nebo", "Mount Carmel", "Mount Moriah"],
+        correctAnswer: "Mount Sinai"
+    },
+    {
+        question: "Which disciple was a fisherman by trade before following Jesus?",
+        options: ["Peter", "James", "John", "Andrew"],
+        correctAnswer: "Peter"
+    },
+    {
+        question: "What type of wood was used to build Noah's ark?",
+        options: ["Cedar", "Oak", "Gopher", "Pine"],
+        correctAnswer: "Gopher"
+    },
+    {
+        question: "Who is known for being a good friend of David and the son of King Saul?",
+        options: ["Jonathan", "Absalom", "Nathan", "Eliab"],
+        correctAnswer: "Jonathan"
+    },
+    {
+        question: "What is the name of the river in which Naaman washed to be healed of leprosy?",
+        options: ["Nile", "Jordan", "Euphrates", "Tigris"],
+        correctAnswer: "Jordan"
+    },
+    {
+        question: "Which Old Testament character is famous for interpreting dreams in Egypt?",
+        options: ["Joseph", "Daniel", "Ezekiel", "Jeremiah"],
+        correctAnswer: "Joseph"
+    },
+    {
+        question: "What is the last book of the Pentateuch (first five books of the Bible)?",
+        options: ["Genesis", "Exodus", "Leviticus", "Deuteronomy"],
+        correctAnswer: "Deuteronomy"
+    },
+  
+    {
+        question: "Who was the prophet that challenged the prophets of Baal on Mount Carmel?",
+        options: ["Elijah", "Elisha", "Isaiah", "Jeremiah"],
+        correctAnswer: "Elijah"
+    },
+    {
+        question: "What is the name of the city where Jesus was born?",
+        options: ["Nazareth", "Bethlehem", "Jerusalem", "Capernaum"],
+        correctAnswer: "Bethlehem"
+    },
+    {
+        question: "In the parable of the lost sheep, how many sheep does the shepherd leave to find the lost one?",
+        options: ["99", "100", "10", "50"],
+        correctAnswer: "99"
+    },
+    {
+        question: "Who was the king of Israel when Jesus was born?",
+        options: ["Herod the Great", "King David", "King Solomon", "King Ahab"],
+        correctAnswer: "Herod the Great"
+    },
+    {
+        question: "What is the name of the river where Jesus was baptized?",
+        options: ["Jordan", "Nile", "Euphrates", "Tigris"],
+        correctAnswer: "Jordan"
+    },
+    {
+        question: "Who was the father of John the Baptist?",
+        options: ["Zechariah", "Simeon", "Joseph", "Joachim"],
+        correctAnswer: "Zechariah"
+    },
+    {
+        question: "What is the name of the disciple who doubted Jesus' resurrection until he saw him?",
+        options: ["Thomas", "Andrew", "Philip", "Bartholomew"],
+        correctAnswer: "Thomas"
+    },
+    {
+        question: "Who was the woman at the well that Jesus spoke to in Samaria?",
+        options: ["Mary Magdalene", "Martha", "Rahab", "Samaritan woman"],
+        correctAnswer: "Samaritan woman"
+    },
+    {
+        question: "What city was Paul traveling to when he had a conversion experience on the road to Damascus?",
+        options: ["Jerusalem", "Rome", "Antioch", "Damascus"],
+        correctAnswer: "Damascus"
+    },
+    {
+        question: "What is the name of the disciple who was a tax collector before following Jesus?",
+        options: ["Matthew", "Simon Peter", "James", "John"],
+        correctAnswer: "Matthew"
+    },
+    {
+        question: "What is the central theme of the Book of Job?",
+        options: ["Wisdom", "Faithfulness", "Suffering", "Hope"],
+        correctAnswer: "Suffering"
+    },
+    {
+        question: "Who was the great-grandmother of King David?",
+        options: ["Ruth", "Esther", "Sarah", "Rebekah"],
+        correctAnswer: "Ruth"
+    },
+    {
+        question: "What event does the feast of Passover commemorate?",
+        options: ["Exodus from Egypt", "Building of the Temple", "David's Kingship", "Sermon on the Mount"],
+        correctAnswer: "Exodus from Egypt"
+    },
+    {
+        question: "Who was the first king anointed by the prophet Samuel?",
+        options: ["Saul", "David", "Solomon", "Saul's son Jonathan"],
+        correctAnswer: "Saul"
+    },
+    {
+        question: "Which woman in the Bible became a judge and prophetess of Israel?",
+        options: ["Deborah", "Hannah", "Esther", "Miriam"],
+        correctAnswer: "Deborah"
+    },
+    {
+        question: "What is the name of the disciple who walked with Jesus on the road to Emmaus?",
+        options: ["Cleopas", "Philip", "Bartimaeus", "Simon"],
+        correctAnswer: "Cleopas"
+    },
+    {
+        question: "In the Book of Revelation, what is the number of the beast?",
+        options: ["666", "777", "888", "555"],
+        correctAnswer: "666"
+    },
+    {
+        question: "What is the name of the mountain where Elijah confronted the prophets of Baal?",
+        options: ["Mount Sinai", "Mount Hermon", "Mount Carmel", "Mount Moriah"],
+        correctAnswer: "Mount Carmel"
+    },
+    {
+        question: "Who wrote the majority of the Psalms in the Bible?",
+        options: ["Moses", "David", "Solomon", "Asaph"],
+        correctAnswer: "David"
+    },
+    {
+        question: "What is the name of the angel who announced the birth of Jesus to Mary?",
+        options: ["Gabriel", "Michael", "Raphael", "Uriel"],
+        correctAnswer: "Gabriel"
+    },
+    {
+        question: "What is the meaning of the name 'Immanuel,' as mentioned in the Bible?",
+        options: ["God is with us", "God is love", "God is powerful", "God is merciful"],
+        correctAnswer: "God is with us"
+    },
+    {
+        question: "Who wrote the Book of Acts in the New Testament?",
+        options: ["Matthew", "Mark", "Luke", "John"],
+        correctAnswer: "Luke"
+    },
+    {
+        question: "What is the shortest book in the New Testament?",
+        options: ["James", "Philemon", "2 John", "Jude"],
+        correctAnswer: "Philemon"
+    },
+    {
+        question: "What is the name of the city where Paul was born?",
+        options: ["Jerusalem", "Antioch", "Tarsus", "Athens"],
+        correctAnswer: "Tarsus"
+    },
+    {
+        question: "Which Old Testament prophet had a vision of a valley of dry bones?",
+        options: ["Isaiah", "Jeremiah", "Ezekiel", "Daniel"],
+        correctAnswer: "Ezekiel"
+    },
+    {
+        question: "What did God provide for the Israelites in the wilderness during their journey?",
+        options: ["Quail and manna", "Fish and bread", "Wine and oil", "Figs and honey"],
+        correctAnswer: "Quail and manna"
+    },
+    {
+        question: "Who was the first Christian martyr, stoned to death for his faith?",
+        options: ["Stephen", "Philip", "James", "Barnabas"],
+        correctAnswer: "Stephen"
+    },
+    {
+        question: "What is the name of the disciple who doubted Jesus' resurrection until he saw him?",
+        options: ["Thomas", "Andrew", "Philip", "Bartholomew"],
+        correctAnswer: "Thomas"
+    },
+    {
+        question: "Who is known as the 'disciple whom Jesus loved'?",
+        options: ["Peter", "John", "James", "Matthew"],
+        correctAnswer: "John"
+    },
+    {
+        question: "What is the final book of the Old Testament?",
+        options: ["Malachi", "Zechariah", "Haggai", "Joel"],
+        correctAnswer: "Malachi"
+    },
+
+    {
+        question: "What is the significance of the number 12 in the Bible?",
+        options: ["Number of disciples", "Tribes of Israel", "Fruits of the Spirit", "Books of the Bible"],
+        correctAnswer: "Tribes of Israel"
+    },
+    {
+        question: "Who was the mother of John the Baptist?",
+        options: ["Elizabeth", "Mary", "Anna", "Sarah"],
+        correctAnswer: "Elizabeth"
+    },
+    {
+        question: "What is the name of the high priest who questioned Jesus during his trial?",
+        options: ["Caiaphas", "Annas", "Gamaliel", "Herod"],
+        correctAnswer: "Caiaphas"
+    },
+    {
+        question: "Which disciple walked on water for a brief moment with Jesus?",
+        options: ["Peter", "John", "James", "Andrew"],
+        correctAnswer: "Peter"
+    },
+    {
+        question: "What is the first commandment given to mankind in the Bible?",
+        options: ["You shall not steal", "You shall not murder", "You shall have no other gods before me", "Honor your father and mother"],
+        correctAnswer: "You shall have no other gods before me"
+    },
+    {
+        question: "Who wrote the majority of the New Testament epistles (letters)?",
+        options: ["Peter", "James", "Paul", "John"],
+        correctAnswer: "Paul"
+    },
+    {
+        question: "What miracle did Jesus perform at the pool of Bethesda?",
+        options: ["Healing a blind man", "Feeding the 5,000", "Raising Lazarus", "Healing a paralyzed man"],
+        correctAnswer: "Healing a paralyzed man"
+    },
+    {
+        question: "What did Jesus use to feed the 4,000 people in the wilderness?",
+        options: ["Five loaves and two fish", "Seven loaves and a few small fish", "Ten loaves and five fish", "Bread and wine"],
+        correctAnswer: "Seven loaves and a few small fish"
+    },
+    {
+        question: "Who said, 'For God so loved the world, that he gave his only Son'?",
+        options: ["Paul", "John the Baptist", "Jesus", "Moses"],
+        correctAnswer: "Jesus"
+    },
+    {
+        question: "What is the name of the angel who announced the birth of Jesus to Mary?",
+        options: ["Gabriel", "Michael", "Raphael", "Uriel"],
+        correctAnswer: "Gabriel"
+    },
+    // Add more questions as needed...
+    {
+        question: "Who was the prophet that raised a widow's son from the dead?",
+        options: ["Elijah", "Elisha", "Jeremiah", "Isaiah"],
+        correctAnswer: "Elisha"
+    },
+    {
+        question: "Which city is known as the birthplace of Jesus?",
+        options: ["Jerusalem", "Bethlehem", "Nazareth", "Capernaum"],
+        correctAnswer: "Bethlehem"
+    },
+    {
+        question: "What is the name of the river where Jesus was baptized?",
+        options: ["Jordan", "Nile", "Euphrates", "Tigris"],
+        correctAnswer: "Jordan"
+    },
+    {
+        question: "Who was the first king of Israel?",
+        options: ["Saul", "David", "Solomon", "Samuel"],
+        correctAnswer: "Saul"
+    },
+    {
+        question: "In the story of the Good Samaritan, who passed by the injured man before the Samaritan helped him?",
+        options: ["A priest", "A Levite", "A Pharisee", "A Sadducee"],
+        correctAnswer: "A priest"
+    },
+    {
+        question: "What is the name of the disciple who betrayed Jesus for thirty pieces of silver?",
+        options: ["Judas Iscariot", "Peter", "John", "Andrew"],
+        correctAnswer: "Judas Iscariot"
+    },
+    {
+        question: "Which king built the first temple in Jerusalem?",
+        options: ["David", "Solomon", "Hezekiah", "Josiah"],
+        correctAnswer: "Solomon"
+    },
+    {
+        question: "What is the fruit that Adam and Eve ate in the Garden of Eden?",
+        options: ["Apple", "Fig", "Grape", "Pomegranate"],
+        correctAnswer: "Not specified in the Bible"
+    },
+    {
+        question: "Who wrote most of the Psalms in the Bible?",
+        options: ["Moses", "David", "Solomon", "Asaph"],
+        correctAnswer: "David"
+    },
+    {
+        question: "What is the last word in the Bible?",
+        options: ["Amen", "Hallelujah", "Grace", "Love"],
+        correctAnswer: "Amen"
+    },
+    // Add more questions as needed...
+    {
+        question: "Who was the first man created according to the Bible?",
+        options: ["Adam", "Eve", "Abel", "Cain"],
+        correctAnswer: "Adam"
+    },
+    {
+        question: "Which prophet was swallowed by a great fish?",
+        options: ["Isaiah", "Jeremiah", "Jonah", "Ezekiel"],
+        correctAnswer: "Jonah"
+    },
+    {
+        question: "What was the name of the giant defeated by a young David with a sling and a stone?",
+        options: ["Goliath", "Saul", "Absalom", "Nimrod"],
+        correctAnswer: "Goliath"
+    },
+    {
+        question: "Who baptized Jesus in the Jordan River?",
+        options: ["John the Baptist", "Peter", "Philip", "Andrew"],
+        correctAnswer: "John the Baptist"
+    },
+    {
+        question: "What is the name of the tax collector who climbed a sycamore tree to see Jesus?",
+        options: ["Zacchaeus", "Matthew", "Bartimaeus", "Simon"],
+        correctAnswer: "Zacchaeus"
+    },
+    {
+        question: "Who betrayed Jesus with a kiss in the Garden of Gethsemane?",
+        options: ["Peter", "Judas Iscariot", "Thomas", "Andrew"],
+        correctAnswer: "Judas Iscariot"
+    },
+    {
+        question: "How many books are there in the Old Testament?",
+        options: ["39", "27", "66", "12"],
+        correctAnswer: "39"
+    },
+    {
+        question: "What is the shortest verse in the Bible?",
+        options: ["Jesus wept", "God is love", "The Lord is my shepherd", "In the beginning"],
+        correctAnswer: "Jesus wept"
+    },
+    {
+        question: "What is the last book of the New Testament?",
+        options: ["Revelation", "Romans", "Genesis", "Exodus"],
+        correctAnswer: "Revelation"
+    },
+    {
+        question: "Which prophet caused an axe head to float on water?",
+        options: ["Elijah", "Elisha", "Isaiah", "Jeremiah"],
+        correctAnswer: "Elisha"
+    },
+    // Add more questions as needed...
+];
+
+
+
+    // Shuffle the questions array
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    shuffleArray(questions);
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const questionElement = document.getElementById('question');
+    const optionsElement = document.getElementById('options');
+    const scoreElement = document.getElementById('score');
+
+    function loadQuestion() {
+        const currentQuestion = questions[currentQuestionIndex];
+        questionElement.textContent = currentQuestion.question;
+        optionsElement.innerHTML = "";
+
+        // Shuffle the options array
+        const shuffledOptions = [...currentQuestion.options];
+        shuffleArray(shuffledOptions);
+
+        shuffledOptions.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.textContent = option;
+            button.classList.add('option');
+            button.addEventListener('click', () => checkAnswer(index));
+            optionsElement.appendChild(button);
+        });
+    }
+
+    function checkAnswer(selectedIndex) {
+        const currentQuestion = questions[currentQuestionIndex];
+
+        if (currentQuestion.options[selectedIndex] === currentQuestion.correctAnswer) {
+            score++;
+        } else {
+            alert(`Incorrect! The correct answer is: ${currentQuestion.correctAnswer}`);
+        }
+
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+
+        updateScore();
+    }
+
+    function updateScore() {
+        scoreElement.textContent = `Score: ${score}`;
+    }
+
+    function showResult() {
+        questionElement.textContent = "Quiz Completed!";
+        optionsElement.innerHTML = "";
+        scoreElement.textContent = `Final Score: ${score} out of ${questions.length}`;
+    }
+
+    // Initial load
+    loadQuestion();
+</script>
+
+</body>
+</html>

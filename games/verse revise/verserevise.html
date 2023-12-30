@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        /* Your existing styles remain unchanged */
         body {
             margin: 0;
             padding: 0;
@@ -14,6 +16,8 @@
             height: 100vh;
             transition: background-image 0.5s ease-in-out; /* Add transition effect */
         }
+
+        /* Add any additional styles you need */
 
         #header {
             background-color: #4CAF50; /* Green background color */
@@ -42,7 +46,7 @@
             cursor: pointer;
         }
     </style>
-    <title>True or False Game</title>
+    <title>Verse Reverse</title>
 </head>
 <body>
 
@@ -50,49 +54,126 @@
     <source src="start_sound.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
 </audio>
-    <div id="header">
-        <a id="logo" href="../../games.html">
-            <img src="logo_yellow.png" alt="True or False Game Logo" width="5%">
-        </a>
-    </div>
 
-        
-    <div id="question-container">
-        <p id="question">Is the sky blue?</p>
-        <button onclick="checkAnswer(true)">True</button>
-        <button onclick="checkAnswer(false)">False</button>
-    </div>
-    <script>
-        var currentQuestion = 0;
-        var totalQuestions = 50;
+<div id="header">
+    <a id="logo" href="../../games.html">
+        <img src="logo yellow.png" alt="True or False Game Logo" width="5%">
+    </a>
+</div>
 
-        // Set the initial background image
-        document.body.style.backgroundImage = 'url("full_screen_bottom_image (0).jpg")';
+<div id="question-container">
+    <p id="question"></p>
+    <button onclick="checkAnswer(true)">True</button>
+    <button onclick="checkAnswer(false)">False</button>
+</div>
 
-        function checkAnswer(isTrue) {
-            var correctAnswer = true; // Set the correct answer for the current question
+<script>    var questionsAndAnswers = [
+        { question: "The Bible is divided into two main sections: the Old Testament and the New Testament.", answer: true },
+        { question: "Adam and Eve were the only humans created directly by God.", answer: true },
+        { question: "Moses' sister, Miriam, played a crucial role in the story of the Exodus.", answer: true },
+        { question: "The Gospel of Matthew is the first book of the New Testament.", answer: true },
+        { question: "King Solomon was known for his wisdom and wrote many of the Proverbs.", answer: true },
+        { question: "The Tower of Babel was built after the Great Flood.", answer: false },
+        { question: "The Apostle Paul was originally named Saul.", answer: true },
+        { question: "Jesus was born in Bethlehem.", answer: true },
+        { question: "The Book of Psalms is a collection of poems and songs.", answer: true },
+        { question: "Noah's Ark had three decks.", answer: true },
+        { question: "The Sermon on the Mount is recorded in the Gospel of Luke.", answer: false },
+        { question: "The prophet Jonah was swallowed by a whale.", answer: false },
+        { question: "Jericho's walls fell after the Israelites circled it for seven days.", answer: true },
+        { question: "The burning bush was how God appeared to Moses.", answer: true },
+        { question: "The apostle Peter denied Jesus three times.", answer: true },
+        { question: "Joseph, the son of Jacob, was sold into slavery by his brothers.", answer: true },
+        { question: "The Last Supper took place during the Jewish festival of Passover.", answer: true },
+        { question: "Abraham and Sarah had a son named Isaac.", answer: true },
+        { question: "The Book of Revelation is the first book of the New Testament.", answer: false },
+        { question: "The Israelites wandered in the wilderness for 40 years.", answer: true },
+        { question: "John the Baptist baptized Jesus in the Jordan River.", answer: true },
+        { question: "The Apostle James, son of Zebedee, was the first apostle to be martyred.", answer: true },
+        { question: "The Ten Commandments were given to Moses on Mount Sinai.", answer: true },
+        { question: "The book of Daniel is in the Old Testament.", answer: true },
+        { question: "Samson's strength was in his long hair.", answer: true },
+        { question: "The Prodigal Son wasted his inheritance in a distant country.", answer: true },
+        { question: "Esther was a queen in Persia who helped save the Jewish people.", answer: true },
+        { question: "Paul and Silas were imprisoned in Philippi and experienced an earthquake.", answer: true },
+        { question: "David killed Goliath with a sling and a stone.", answer: true },
+        { question: "Jesus was born in the year 1 A.D.", answer: false },
+        { question: "The Ark of the Covenant was kept in the Holy of Holies in the Tabernacle.", answer: true },
+        { question: "The Apostle Thomas is also known as 'Doubting Thomas.'", answer: true },
+        { question: "Isaiah prophesied about the coming Messiah.", answer: true },
+        { question: "The Apostle John wrote the Gospel of John, three epistles, and the Book of Revelation.", answer: true },
+        { question: "Ruth was a Moabite woman who became the great-grandmother of King David.", answer: true },
+        { question: "Elijah was taken up to heaven in a chariot of fire.", answer: true },
+        { question: "The book of Genesis has 50 chapters.", answer: false },
+        { question: "The Apostle Andrew was the brother of Peter.", answer: true },
+        { question: "The Great Commission instructs believers to baptize in the name of the Father, Son, and Holy Spirit.", answer: true },
+        { question: "Solomon built the first temple in Jerusalem.", answer: true },
+        { question: "The Apostle Philip was one of the original twelve disciples.", answer: true },
+        { question: "The first miracle recorded in the New Testament is turning water into wine.", answer: true },
+        { question: "The Good Samaritan helped a man who had been attacked by robbers.", answer: true },
+        { question: "The Apostle Jude was also known as Thaddeus.", answer: true },
+        { question: "The book of Exodus describes the journey of the Israelites from Egypt to the Promised Land.", answer: true },
+        { question: "Jesus fed 5,000 people with five loaves and two fish.", answer: true },
+        { question: "The Apostle Barnabas was originally named Saul.", answer: false },
+        { question: "The Day of Pentecost is considered the birth of the Christian church.", answer: true },
+        { question: "Mary Magdalene was one of the women who discovered the empty tomb of Jesus.", answer: true },
+        { question: "The Valley of Dry Bones vision is found in the book of Ezekiel.", answer: true },
+        { question: "The Apostle Matthias was chosen to replace Judas Iscariot.", answer: true },
+        { question: "Jesus was crucified at Golgotha, also known as the Place of the Skull.", answer: true },
+    ];
+    // Shuffle the questionsAndAnswers array
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
 
-            if (isTrue === correctAnswer) {
-                // Change background image for correct answer
-                document.body.style.backgroundImage = 'url("full_screen_bottom_image (' + currentQuestion + ').jpg")';
-            }
+    // Shuffle the questionsAndAnswers before starting the game
+    shuffleArray(questionsAndAnswers);
 
-            // Check if it's the last question
-            if (currentQuestion === totalQuestions - 1) {
-                document.getElementById('question').innerText = "End of the game!";
-            } else {
-                // You can add more logic here, such as loading the next question.
-                currentQuestion++;
-            }
+    var currentQuestion = 0;
+    var totalQuestions = questionsAndAnswers.length;
+
+    // Set the initial background image
+    document.body.style.backgroundImage = 'url("full_screen_bottom_image (0).jpg")';
+
+    function loadQuestion() {
+        document.getElementById('question').innerText = questionsAndAnswers[currentQuestion].question;
+    }
+
+    function checkAnswer(userAnswer) {
+        var correctAnswer = questionsAndAnswers[currentQuestion].answer;
+
+        if (userAnswer === correctAnswer) {
+            // Change background image for correct answer
+            document.body.style.backgroundImage = 'url("full_screen_bottom_image (' + currentQuestion + ').jpg")';
+        } else {
+            // Notify the user with an alert for incorrect answer
+            alert("Incorrect! The correct answer is " + (correctAnswer ? "True" : "False"));
         }
 
-        // Get the audio element
-        var audio = document.getElementById("myAudio");
+        // Check if it's the last question
+        if (currentQuestion === totalQuestions - 1) {
+            document.getElementById('question').innerText = "End of the game!";
+        } else {
+            // Move to the next question
+            currentQuestion++;
+            loadQuestion();
+        }
+    }
 
-        // Set a timeout to stop the audio after a certain duration (e.g., 5 seconds)
-        setTimeout(function(){
-            audio.pause();
-        }, 5000); // Adjust the time in milliseconds as needed
-    </script>
+    // Load the first question
+    loadQuestion();
+
+    // Get the audio element
+    var audio = document.getElementById("myAudio");
+
+    // Set a timeout to stop the audio after a certain duration (e.g., 5 seconds)
+    setTimeout(function(){
+        audio.pause();
+    }, 5000); // Adjust the time in milliseconds as needed
+</script>
+
 </body>
 </html>
